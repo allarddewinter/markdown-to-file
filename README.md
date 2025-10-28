@@ -95,16 +95,7 @@ function hello() {
    cd markdown-to-file
    ```
 
-2. Open `index.html` in your browser or use a local server:
-   ```bash
-   # Python 3
-   python -m http.server 8000
-   
-   # Node.js
-   npx serve
-   ```
-
-3. Navigate to `http://localhost:8000`
+2. Open `index.html` in your browser.
 
 ## 🤝 Contributing
 
@@ -155,6 +146,7 @@ MIT License - feel free to use this project however you'd like!
 ---
 
 **Note**: This is a client-side only application. All processing happens in your browser, and no data is sent to any server.
+
 
 
 
