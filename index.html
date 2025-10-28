@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown to File Converter</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📜</text></svg>">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="highlight-theme">
+    <link rel="stylesheet" href="styles/themes/github.css" id="preview-theme">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 id="mainTitle">Markdown to File Converter</h1>
+            <p id="headerSubtext">Convert markdown to PDF or HTML with syntax highlighting</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Left Pane: Markdown Input -->
+            <div class="editor-pane">
+                <div class="pane-header">
+                    <h2>Markdown Input</h2>
+                    <div class="button-group">
+                        <button id="uploadBtn" class="btn btn-secondary" title="Summon a scroll from the archives">
+                            📁 Upload Scroll
+                        </button>
+                        <button id="clearBtn" class="btn btn-secondary" title="Erase all knowledge (cannot be undone!)">
+                            🗑️ Destroy Evidence
+                        </button>
+                    </div>
+                </div>
+                <textarea id="markdownInput" placeholder="Paste your markdown here...
+
+# Example Heading
+
+This is a paragraph with **bold** and *italic* text.
+
+## Code Example
+
+```javascript
+function hello() {
+    console.log('Hello, World!');
+}
+```
+
+## Table Example
+
+| Feature | Status |
+|---------|--------|
+| PDF Export | ✅ |
+| HTML Export | ✅ |
+"></textarea>
+                <input type="file" id="fileInput" accept=".md,.txt" style="display: none;">
+            </div>
+
+            <!-- Right Pane: Live Preview -->
+            <div class="preview-pane">
+                <div class="pane-header">
+                    <h2>Live Preview</h2>
+                </div>
+                <div id="preview" class="preview-content"></div>
+            </div>
+        </div>
+
+        <!-- Message Log -->
+        <div class="message-log" id="messageLog">
+            <div class="log-header">
+                <h3>Messages</h3>
+                <button id="clearLog" class="btn-clear-log" title="Clear messages">✕</button>
+            </div>
+            <div class="log-content" id="logContent"></div>
+        </div>
+
+        <!-- Export Controls -->
+        <div class="export-controls">
+            <div class="control-group">
+                <label for="themeSelect">Theme:</label>
+                <select id="themeSelect">
+                    <option value="github" selected>GitHub</option>
+                    <option value="dark">Dark</option>
+                    <option value="minimal">Minimal</option>
+                    <option value="professional">Professional</option>
+                    <option value="python">Life of Brian</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="filenameInput">Filename:</label>
+                <input type="text" id="filenameInput" value="document" placeholder="document">
+                <button id="addTimestampBtn" class="btn btn-secondary" title="Mark with the current moon cycle">
+                    🕒 Timestamp It
+                </button>
+            </div>
+
+            <div class="control-group">
+                <label for="orientationSelect">Orientation:</label>
+                <select id="orientationSelect">
+                    <option value="portrait" selected>Portrait</option>
+                    <option value="landscape">Landscape</option>
+                </select>
+            </div>
+
+            <div class="control-group export-buttons">
+                <button id="exportPdfBtn" class="btn btn-primary">
+                    📄 Summon PDF
+                </button>
+                <button id="exportHtmlBtn" class="btn btn-primary">
+                    🌐 Craft HTML
+                </button>
+            </div>
+        </div>
+
+        <footer>
+            <p>Crafted with <a href="https://marked.js.org/" target="_blank">Marked.js</a>, 
+            <a href="https://highlightjs.org/" target="_blank">Highlight.js</a>, 
+            and <a href="https://github.com/cure53/DOMPurify" target="_blank">DOMPurify</a> — 
+            <em>"What have the Romans ever done for us? Well... excellent web standards."</em> | 
+            <a href="https://github.com/allarddewinter/markdown-to-file" target="_blank" title="View source code on GitHub">View on GitHub</a></p>
+        </footer>
+    </div>
+
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <!-- Application Scripts (loaded in order) -->
+    <script src="markdown.js"></script>
+    <script src="export.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

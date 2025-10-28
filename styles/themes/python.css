@@ -1,0 +1,400 @@
+/**
+ * "Life of Brian" Theme - Anachronistic Elegance
+ * Modern performance wrapped in absurd, hand-crafted chaos
+ * Inspired by 1st-century aesthetics with satirical intent
+ */
+
+/* Import Google Fonts for thematic typography */
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=IM+Fell+DW+Pica:ital@0;1&family=Special+Elite&display=swap');
+
+:root {
+    /* Dusty Desert Tones - Color Palette */
+    --primary-color: #8B4513;           /* Terracotta */
+    --secondary-color: #D4A574;          /* Sand */
+    --background-color: #F5E6D3;         /* Papyrus */
+    --surface-color: #E8D5BE;            /* Weathered parchment */
+    --border-color: #9B8B7E;             /* Dusty stone */
+    --text-color: #3E2723;               /* Ancient ink */
+    --text-secondary: #6D4C41;           /* Faded text */
+    --error-color: #A0522D;              /* Tarnished copper */
+    --warning-color: #DAA520;            /* Faded gold */
+    --success-color: #556B2F;            /* Olive branch */
+    --info-color: #6A5ACD;               /* Imperial purple */
+    --accent-purple: #7851A9;            /* Faded imperial purple */
+    --accent-gold: #B8860B;              /* Tarnished gold */
+    
+    /* Texture overlays */
+    --texture-noise: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+}
+
+/* Base Typography - NO CLEAN MODERN FONTS */
+body {
+    font-family: 'IM Fell DW Pica', 'Georgia', serif;
+    background-color: var(--background-color);
+    background-image: var(--texture-noise);
+    color: var(--text-color);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Headings - Carved in Stone Aesthetic */
+.preview-content h1,
+.preview-content h2,
+.preview-content h3,
+.preview-content h4,
+.preview-content h5,
+.preview-content h6 {
+    font-family: 'Special Elite', 'Courier New', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-bottom: 3px double var(--border-color);
+    padding-bottom: 0.5rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.preview-content h1::before,
+.preview-content h2::before {
+    content: '✠ ';
+    color: var(--accent-purple);
+    margin-right: 0.5rem;
+}
+
+.preview-content h1 {
+    font-size: 2.2rem;
+    border-bottom-width: 4px;
+    border-bottom-style: solid;
+}
+
+.preview-content h2 {
+    font-size: 1.7rem;
+}
+
+.preview-content h3 {
+    font-size: 1.4rem;
+    border-bottom-style: dashed;
+}
+
+.preview-content h4,
+.preview-content h5,
+.preview-content h6 {
+    font-size: 1.1rem;
+    border-bottom: none;
+}
+
+/* Body Text - Imperfect Serif for Scrolls */
+.preview-content p,
+.preview-content li,
+.preview-content td {
+    font-family: 'IM Fell DW Pica', serif;
+    line-height: 1.8;
+    text-align: justify;
+    hyphens: auto;
+}
+
+/* Code Blocks - Bureaucratic Decree Style */
+.preview-content code {
+    font-family: 'Courier Prime', 'Courier New', monospace;
+    background-color: rgba(139, 69, 19, 0.08);
+    padding: 0.2rem 0.4rem;
+    border-radius: 2px;
+    border: 1px solid var(--border-color);
+    font-size: 0.9em;
+    letter-spacing: 0.02em;
+}
+
+.preview-content pre {
+    background-color: var(--surface-color);
+    background-image: 
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 1.4rem,
+            var(--border-color) 1.4rem,
+            var(--border-color) calc(1.4rem + 1px)
+        ),
+        var(--texture-noise);
+    border: 2px solid var(--border-color);
+    border-radius: 0;
+    padding: 1.5rem;
+    box-shadow: 
+        inset 3px 3px 6px rgba(0, 0, 0, 0.1),
+        3px 3px 10px rgba(0, 0, 0, 0.15);
+    position: relative;
+    overflow-x: auto;
+}
+
+.preview-content pre::before {
+    content: '📜 OFFICIAL DECREE';
+    position: absolute;
+    top: 0.5rem;
+    right: 1rem;
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    font-family: 'Special Elite', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    opacity: 0.6;
+}
+
+.preview-content pre code {
+    background: none;
+    border: none;
+    padding: 0;
+    display: block;
+    line-height: 1.4rem;
+}
+
+/* Tables - Ancient Ledger Style */
+.preview-content table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 3px solid var(--border-color);
+    background-color: var(--background-color);
+    background-image: var(--texture-noise);
+    margin: 2rem 0;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.preview-content table th {
+    background-color: var(--accent-purple);
+    color: var(--background-color);
+    font-family: 'Special Elite', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 1rem;
+    border-bottom: 3px double var(--accent-gold);
+    text-align: left;
+    font-size: 0.9rem;
+}
+
+.preview-content table td {
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+}
+
+.preview-content table td:last-child {
+    border-right: none;
+}
+
+.preview-content table tr:last-child td {
+    border-bottom: none;
+}
+
+.preview-content table tr:nth-child(even) {
+    background-color: rgba(212, 165, 116, 0.15);
+}
+
+.preview-content table tr:hover {
+    background-color: rgba(120, 81, 169, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+/* Blockquotes - Proclamation Style */
+.preview-content blockquote {
+    border-left: 5px solid var(--accent-purple);
+    border-top: 2px solid var(--border-color);
+    border-bottom: 2px solid var(--border-color);
+    background-color: var(--surface-color);
+    background-image: var(--texture-noise);
+    padding: 1.5rem 2rem;
+    margin: 2rem 0;
+    font-style: italic;
+    position: relative;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.preview-content blockquote::before {
+    content: '❝';
+    position: absolute;
+    top: -0.5rem;
+    left: 0.5rem;
+    font-size: 4rem;
+    color: var(--accent-purple);
+    opacity: 0.3;
+    font-family: Georgia, serif;
+}
+
+.preview-content blockquote::after {
+    content: '— Thus it is written';
+    display: block;
+    text-align: right;
+    font-size: 0.85rem;
+    margin-top: 1rem;
+    font-family: 'Special Elite', monospace;
+    color: var(--text-secondary);
+    font-style: normal;
+}
+
+/* Links - Ancient Manuscript Cross-References */
+.preview-content a {
+    color: var(--accent-purple);
+    text-decoration: underline wavy var(--accent-gold);
+    text-underline-offset: 3px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.preview-content a:hover {
+    color: var(--accent-gold);
+    text-decoration-color: var(--accent-purple);
+    transform: translateX(2px);
+}
+
+.preview-content a::after {
+    content: ' ⟶';
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.preview-content a:hover::after {
+    opacity: 1;
+}
+
+/* Lists - Edict Style */
+.preview-content ul,
+.preview-content ol {
+    margin: 1.5rem 0;
+    padding-left: 3rem;
+}
+
+.preview-content ul li::marker {
+    content: '⸗ ';
+    color: var(--accent-purple);
+    font-size: 1.2em;
+}
+
+.preview-content ol li::marker {
+    font-family: 'Special Elite', monospace;
+    color: var(--accent-purple);
+    font-weight: bold;
+}
+
+.preview-content li {
+    margin-bottom: 0.8rem;
+    padding-left: 0.5rem;
+}
+
+/* Horizontal Rules - Decorative Dividers */
+.preview-content hr {
+    height: 0;
+    border: none;
+    border-top: 3px double var(--border-color);
+    margin: 3rem 0;
+    position: relative;
+    overflow: visible;
+}
+
+.preview-content hr::after {
+    content: '✠';
+    position: absolute;
+    top: -0.7rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--background-color);
+    padding: 0 1rem;
+    color: var(--accent-purple);
+    font-size: 1.2rem;
+}
+
+/* Images - Ancient Fresco Style */
+.preview-content img {
+    max-width: 100%;
+    height: auto;
+    border: 5px solid var(--border-color);
+    box-shadow: 
+        0 0 0 2px var(--background-color),
+        0 0 0 7px var(--accent-gold),
+        8px 8px 20px rgba(0, 0, 0, 0.3);
+    margin: 2rem 0;
+    filter: sepia(15%) contrast(95%);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.preview-content img:hover {
+    filter: sepia(0%) contrast(100%);
+    transform: scale(1.02);
+}
+
+/* Smooth Scrolling - Modern Performance */
+.preview-content {
+    scroll-behavior: smooth;
+    overflow-y: auto;
+}
+
+/* Custom Scrollbar - Ancient Scroll Handle */
+.preview-content::-webkit-scrollbar {
+    width: 14px;
+}
+
+.preview-content::-webkit-scrollbar-track {
+    background: var(--surface-color);
+    border-left: 2px solid var(--border-color);
+}
+
+.preview-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--accent-purple), var(--accent-gold));
+    border: 2px solid var(--border-color);
+    border-radius: 0;
+}
+
+.preview-content::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, var(--accent-gold), var(--accent-purple));
+}
+
+/* Selection - Imperial Highlight */
+.preview-content ::selection {
+    background-color: var(--accent-purple);
+    color: var(--background-color);
+    text-shadow: none;
+}
+
+/* Animations - Smooth but Surreal */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px) rotate(-1deg);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) rotate(0deg);
+    }
+}
+
+.preview-content > * {
+    animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+}
+
+.preview-content > *:nth-child(1) { animation-delay: 0.05s; }
+.preview-content > *:nth-child(2) { animation-delay: 0.1s; }
+.preview-content > *:nth-child(3) { animation-delay: 0.15s; }
+.preview-content > *:nth-child(4) { animation-delay: 0.2s; }
+.preview-content > *:nth-child(5) { animation-delay: 0.25s; }
+
+/* Performance Optimization - Modern Standards */
+.preview-content * {
+    will-change: auto;
+}
+
+.preview-content img,
+.preview-content a,
+.preview-content table tr {
+    will-change: transform;
+}
+
+/* Print Styles - Maintain Aesthetic */
+@media print {
+    .preview-content {
+        background: white;
+    }
+    
+    .preview-content pre,
+    .preview-content blockquote,
+    .preview-content table {
+        page-break-inside: avoid;
+    }
+}

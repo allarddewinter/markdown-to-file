@@ -1,0 +1,227 @@
+/**
+ * Minimal Theme
+ * Description: Clean, distraction-free design with focus on content
+ * Author: Markdown-to-File Project
+ */
+
+.preview-content {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 18px;
+  line-height: 1.7;
+  color: #2c3e50;
+  background-color: #ffffff;
+  padding: 2rem;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Headers */
+.preview-content h1 {
+  font-size: 2.2em;
+  font-weight: 400;
+  margin-top: 1.5em;
+  margin-bottom: 0.7em;
+  line-height: 1.2;
+  color: #1a1a1a;
+}
+
+.preview-content h2 {
+  font-size: 1.7em;
+  font-weight: 400;
+  margin-top: 1.5em;
+  margin-bottom: 0.6em;
+  line-height: 1.3;
+  color: #1a1a1a;
+}
+
+.preview-content h3 {
+  font-size: 1.4em;
+  font-weight: 400;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  line-height: 1.3;
+  color: #1a1a1a;
+}
+
+.preview-content h4 {
+  font-size: 1.2em;
+  font-weight: 600;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  line-height: 1.3;
+  color: #1a1a1a;
+}
+
+.preview-content h5 {
+  font-size: 1em;
+  font-weight: 600;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  line-height: 1.3;
+  color: #1a1a1a;
+}
+
+.preview-content h6 {
+  font-size: 0.9em;
+  font-weight: 600;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  line-height: 1.3;
+  color: #555555;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Paragraphs */
+.preview-content p {
+  margin-top: 0;
+  margin-bottom: 1.3em;
+}
+
+/* Links */
+.preview-content a {
+  color: #3498db;
+  text-decoration: none;
+  border-bottom: 1px solid #3498db;
+}
+
+.preview-content a:hover {
+  color: #2980b9;
+  border-bottom-color: #2980b9;
+}
+
+/* Lists */
+.preview-content ul,
+.preview-content ol {
+  margin-top: 0;
+  margin-bottom: 1.3em;
+  padding-left: 1.5em;
+}
+
+.preview-content li {
+  margin-top: 0.5em;
+}
+
+.preview-content li > p {
+  margin-top: 0.8em;
+}
+
+/* Code */
+.preview-content code {
+  padding: 0.15em 0.4em;
+  margin: 0;
+  font-size: 90%;
+  background-color: #f5f5f5;
+  border-radius: 3px;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  color: #c7254e;
+}
+
+.preview-content pre {
+  padding: 1.2em;
+  overflow: auto;
+  font-size: 0.9em;
+  line-height: 1.5;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+  border-left: 3px solid #3498db;
+  margin-top: 0;
+  margin-bottom: 1.3em;
+}
+
+.preview-content pre code {
+  display: inline;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  line-height: inherit;
+  background-color: transparent;
+  border: 0;
+  font-size: 100%;
+  color: inherit;
+}
+
+/* Tables */
+.preview-content table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 0;
+  margin-bottom: 1.3em;
+  overflow: auto;
+  font-size: 0.95em;
+}
+
+.preview-content table th {
+  font-weight: 600;
+  padding: 10px 15px;
+  border: none;
+  border-bottom: 2px solid #2c3e50;
+  background-color: transparent;
+  text-align: left;
+}
+
+.preview-content table td {
+  padding: 10px 15px;
+  border: none;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.preview-content table tr {
+  background-color: #ffffff;
+}
+
+.preview-content table tr:nth-child(2n) {
+  background-color: #fafafa;
+}
+
+/* Blockquotes */
+.preview-content blockquote {
+  padding: 0.5em 1.5em;
+  color: #555555;
+  border-left: 4px solid #3498db;
+  margin-top: 0;
+  margin-bottom: 1.3em;
+  font-style: italic;
+  background-color: #f9f9f9;
+}
+
+.preview-content blockquote > :first-child {
+  margin-top: 0;
+}
+
+.preview-content blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+/* Horizontal Rule */
+.preview-content hr {
+  height: 1px;
+  padding: 0;
+  margin: 2em 0;
+  background-color: #e0e0e0;
+  border: 0;
+}
+
+/* Strong and Emphasis */
+.preview-content strong {
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.preview-content em {
+  font-style: italic;
+}
+
+/* Task Lists */
+.preview-content input[type="checkbox"] {
+  margin-right: 0.7em;
+}
+
+/* Images */
+.preview-content img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1.5em auto;
+}
