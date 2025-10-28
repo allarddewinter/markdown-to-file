@@ -66,11 +66,11 @@ This tool supports full GitHub Flavored Markdown (GFM):
 ## 📋 Examples
 
 ### Code Blocks
-\`\`\`javascript
+```javascript
 function hello() {
   console.log("Markdown with syntax highlighting!");
 }
-\`\`\`
+```
 
 ### Tables
 | Feature | Supported |
@@ -112,7 +112,7 @@ Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for gui
 
 ## 📄 Project Structure
 
-\`\`\`
+```
 markdown-to-file/
 ├── index.html          # Main application page
 ├── app.js             # Application controller
@@ -131,7 +131,7 @@ markdown-to-file/
 ├── CONTRIBUTING.md    # Contribution guidelines
 ├── THEME_GUIDE.md     # Life of Brian theme documentation
 └── TODO.md           # Development progress tracker
-\`\`\`
+```
 
 ## 🔗 Links
 
@@ -155,3 +155,4 @@ MIT License - feel free to use this project however you'd like!
 ---
 
 **Note**: This is a client-side only application. All processing happens in your browser, and no data is sent to any server.
+
