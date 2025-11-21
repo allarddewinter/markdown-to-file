@@ -72,6 +72,16 @@ function hello() {
             <div class="log-content" id="logContent"></div>
         </div>
 
+        <!-- Footnote Selection Toolbar -->
+        <div id="footnoteToolbar" class="footnote-toolbar" style="display: none;">
+            <div class="toolbar-content">
+                <span class="toolbar-label">Add footnote to selected text</span>
+                <input type="text" id="footnoteInput" placeholder="Enter footnote text..." maxlength="500">
+                <button id="addFootnoteBtn" class="btn btn-primary">Add Footnote</button>
+                <button id="cancelFootnoteBtn" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+
         <!-- Export Controls -->
         <div class="export-controls">
             <div class="control-group">

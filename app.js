@@ -107,6 +107,215 @@ class Logger {
 }
 
 /**
+ * FootnoteManager class
+ * Handles footnote creation, management, and rendering
+ */
+class FootnoteManager {
+    constructor() {
+        this.footnotes = new Map();
+        this.nextId = 1;
+        this.selectionStart = null;
+        this.selectionEnd = null;
+    }
+
+    /**
+     * Initialize footnote functionality
+     */
+    init() {
+        this.setupSelectionHandlers();
+        this.setupToolbarHandlers();
+    }
+
+    /**
+     * Setup text selection handlers for footnote creation
+     */
+    setupSelectionHandlers() {
+        const preview = document.getElementById('preview');
+        
+        // Handle text selection in preview
+        preview.addEventListener('mouseup', (e) => {
+            this.handleTextSelection();
+        });
+
+        // Handle touch events for mobile
+        preview.addEventListener('touchend', (e) => {
+            setTimeout(() => this.handleTextSelection(), 100);
+        });
+
+        // Clear selection when clicking elsewhere
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('#footnoteToolbar') && !e.target.closest('.footnote-ref')) {
+                this.clearSelection();
+                this.hideToolbar();
+            }
+        });
+    }
+
+    /**
+     * Setup toolbar button handlers
+     */
+    setupToolbarHandlers() {
+        document.getElementById('addFootnoteBtn').addEventListener('click', () => {
+            this.addFootnote();
+        });
+
+        document.getElementById('cancelFootnoteBtn').addEventListener('click', () => {
+            this.cancelFootnote();
+        });
+
+        // Handle Enter key in footnote input
+        document.getElementById('footnoteInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                this.addFootnote();
+            }
+        });
+    }
+
+    /**
+     * Handle text selection and show footnote toolbar
+     */
+    handleTextSelection() {
+        const selection = window.getSelection();
+        if (!selection || selection.toString().trim().length === 0) {
+            return;
+        }
+
+        const range = selection.getRangeAt(0);
+        const selectedText = selection.toString().trim();
+        
+        if (selectedText.length < 2 || selectedText.length > 500) {
+            return;
+        }
+
+        // Store selection position
+        this.selectionStart = range.startOffset;
+        this.selectionEnd = range.endOffset;
+        this.selectedNode = range.startContainer.parentNode;
+
+        // Highlight selected text
+        this.highlightSelection(range);
+
+        // Show toolbar
+        this.showToolbar();
+    }
+
+    /**
+     * Highlight the selected text
+     */
+    highlightSelection(range) {
+        const span = document.createElement('span');
+        span.className = 'text-selected';
+        span.textContent = range.toString();
+        range.surroundContents(span);
+    }
+
+    /**
+     * Show footnote toolbar
+     */
+    showToolbar() {
+        const toolbar = document.getElementById('footnoteToolbar');
+        toolbar.style.display = 'block';
+        document.getElementById('footnoteInput').focus();
+    }
+
+    /**
+     * Hide footnote toolbar
+     */
+    hideToolbar() {
+        const toolbar = document.getElementById('footnoteToolbar');
+        toolbar.style.display = 'none';
+        document.getElementById('footnoteInput').value = '';
+        this.clearSelection();
+    }
+
+    /**
+     * Clear text selection highlights
+     */
+    clearSelection() {
+        const highlights = document.querySelectorAll('.text-selected');
+        highlights.forEach(highlight => {
+            const parent = highlight.parentNode;
+            parent.replaceChild(document.createTextNode(highlight.textContent), highlight);
+            parent.normalize();
+        });
+    }
+
+    /**
+     * Add a footnote to the selected text
+     */
+    addFootnote() {
+        const footnoteText = document.getElementById('footnoteInput').value.trim();
+        if (!footnoteText) {
+            Logger.warning('Please enter footnote text');
+            return;
+        }
+
+        const footnoteId = this.nextId++;
+        this.footnotes.set(footnoteId, footnoteText);
+
+        // Insert footnote marker in markdown
+        this.insertFootnoteMarker(footnoteId);
+
+        this.hideToolbar();
+        Logger.success(`Footnote ${footnoteId} added`);
+    }
+
+    /**
+     * Insert footnote marker into markdown
+     */
+    insertFootnoteMarker(footnoteId) {
+        const textarea = document.getElementById('markdownInput');
+        const selectedText = window.getSelection().toString().trim();
+        
+        // Find the selected text in the markdown and replace with [^id]selected text
+        const markdown = textarea.value;
+        const startPos = markdown.indexOf(selectedText);
+        
+        if (startPos !== -1) {
+            const newMarkdown = markdown.substring(0, startPos) +
+                               `[^${footnoteId}]` +
+                               markdown.substring(startPos);
+            textarea.value = newMarkdown;
+            
+            // Trigger preview update
+            const event = new Event('input', { bubbles: true });
+            textarea.dispatchEvent(event);
+        }
+    }
+
+    /**
+     * Cancel footnote creation
+     */
+    cancelFootnote() {
+        this.hideToolbar();
+    }
+
+    /**
+     * Get footnote markdown for rendering
+     */
+    getFootnotesMarkdown() {
+        if (this.footnotes.size === 0) {
+            return '';
+        }
+
+        let footnotesMarkdown = '\n\n---\n\n## Footnotes\n\n';
+        this.footnotes.forEach((text, id) => {
+            footnotesMarkdown += `[^${id}]: ${text}\n\n`;
+        });
+
+        return footnotesMarkdown;
+    }
+
+    /**
+     * Render footnotes in preview
+     */
+    renderFootnotes(html) {
+        // This will be handled by the markdown renderer with proper footnote support
+        return html;
+    }
+}
+
+/**
  * Main application controller
  * Manages the entire application lifecycle and coordinates all components
  */
@@ -116,6 +325,7 @@ class App {
         this.renderer = null;
         this.exporter = null;
         this.debounceTimer = null;
+        this.footnoteManager = new FootnoteManager();
     }
 
     /**
@@ -130,6 +340,7 @@ class App {
             // Initialize components
             this.renderer = new MarkdownRenderer();
             this.exporter = new ExportManager();
+            this.footnoteManager.init();
 
             // Restore UI state
             this.restoreUIState();

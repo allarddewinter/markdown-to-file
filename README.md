@@ -7,13 +7,14 @@ A client-side static website that converts markdown (including tables and code b
 - **Live Preview**: Real-time markdown rendering with GitHub Flavored Markdown (GFM) support
 - **Syntax Highlighting**: Code blocks with automatic language detection and highlighting
 - **Multiple Themes**: Choose from GitHub, Dark, Minimal, Professional, or the hilarious "Life of Brian" style
-- **PDF Export**: Generate clean, paginated PDFs with proper formatting
+- **PDF Export**: Generate clean, paginated PDFs with proper formatting and selectable text
 - **HTML Export**: Create self-contained HTML files with embedded styles
 - **Auto-Save**: Automatic localStorage persistence of your markdown content
 - **File Upload**: Load markdown files directly from your computer
 - **Timestamp Support**: Optionally append timestamps to exported filenames
 - **XSS Protection**: DOMPurify sanitization for safe rendering
 - **No Server Required**: 100% client-side, works offline after initial load
+- **Footnote Support**: Add footnotes to selected text with automatic numbering
 
 ## 🚀 Usage
 
@@ -62,6 +63,21 @@ This tool supports full GitHub Flavored Markdown (GFM):
 - Horizontal rules
 - Task lists
 - Strikethrough
+- **Footnotes**: Add footnotes using the selection toolbar
+
+#### Footnote Usage
+
+1. **Select Text**: Highlight any text in the preview pane
+2. **Add Footnote**: A toolbar will appear to add footnote text
+3. **Automatic Formatting**: Footnotes are automatically numbered and added to the end of the document
+4. **Export Ready**: Footnotes are included in both PDF and HTML exports
+
+Example footnote markdown:
+```
+This is some text[^1] with a footnote.
+
+[^1]: This is the footnote content.
+```
 
 ## 📋 Examples
 
