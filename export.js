@@ -293,12 +293,49 @@ class ExportManager {
     }
 
     /**
+     * Optimize CSS for PDF rendering
+     * @param {string} css - Original CSS
+     * @returns {string} - Optimized CSS for PDF
+     */
+    optimizeCSSForPDF(css) {
+        // Remove animations and transitions that don't work well in PDF
+        let optimized = css.replace(/animation[^;]*;/g, '')
+                          .replace(/transition[^;]*;/g, '')
+                          .replace(/transform[^;]*;/g, '')
+                          .replace(/filter[^;]*;/g, '')
+                          .replace(/opacity[^;]*;/g, '');
+        
+        // Add PDF-specific optimizations
+        optimized += '* { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; box-sizing: border-box; }';
+        optimized += 'body { font-family: Arial, Helvetica, sans-serif !important; line-height: 1.4 !important; }';
+        optimized += 'pre, code { font-family: "Courier New", Courier, monospace !important; white-space: pre-wrap !important; }';
+        
+        return optimized;
+    }
+
+    /**
+     * Get PDF-specific print styles for better rendering
+     * @returns {string} - Print-optimized CSS
+     */
+    getPDFPrintStyles() {
+        return '@media print { ' +
+               'body { margin: 0 !important; padding: 15mm !important; background: white !important; color: black !important; font-size: 12pt !important; line-height: 1.4 !important; }' +
+               'h1, h2, h3, h4, h5, h6 { page-break-after: avoid; break-after: avoid; }' +
+               'pre, blockquote, table, img { page-break-inside: avoid; break-inside: avoid; }' +
+               'a { color: #0000EE !important; text-decoration: underline !important; }' +
+               '* { -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; }' +
+               '} ' +
+               'body { visibility: visible !important; opacity: 1 !important; }' +
+               '[style*="display: none"], [style*="visibility: hidden"] { display: block !important; visibility: visible !important; }';
+    }
+
+    /**
      * Generate complete HTML template
      * @param {string} content - Rendered HTML content
      * @param {string} themeName - Theme name
      * @param {string} title - Document title
      * @returns {string} - Complete HTML document
-     * 
+     *
      * Customization guide:
      * - Modify meta tags for SEO or specific requirements
      * - Add custom CSS or JavaScript
@@ -330,42 +367,6 @@ class ExportManager {
             a { color: #000; text-decoration: underline; }
             pre, blockquote { page-break-inside: avoid; }
             h1, h2, h3, h4, h5, h6 { page-break-after: avoid; }
-            /**
-             * Optimize CSS for PDF rendering
-             * @param {string} css - Original CSS
-             * @returns {string} - Optimized CSS for PDF
-             */
-            optimizeCSSForPDF(css) {
-                // Remove animations and transitions that don't work well in PDF
-                let optimized = css.replace(/animation[^;]*;/g, '')
-                                  .replace(/transition[^;]*;/g, '')
-                                  .replace(/transform[^;]*;/g, '')
-                                  .replace(/filter[^;]*;/g, '')
-                                  .replace(/opacity[^;]*;/g, '');
-                
-                // Add PDF-specific optimizations
-                optimized += '* { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; box-sizing: border-box; }';
-                optimized += 'body { font-family: Arial, Helvetica, sans-serif !important; line-height: 1.4 !important; }';
-                optimized += 'pre, code { font-family: "Courier New", Courier, monospace !important; white-space: pre-wrap !important; }';
-                
-                return optimized;
-            }
-        
-            /**
-             * Get PDF-specific print styles for better rendering
-             * @returns {string} - Print-optimized CSS
-             */
-            getPDFPrintStyles() {
-                return '@media print { ' +
-                       'body { margin: 0 !important; padding: 15mm !important; background: white !important; color: black !important; font-size: 12pt !important; line-height: 1.4 !important; }' +
-                       'h1, h2, h3, h4, h5, h6 { page-break-after: avoid; break-after: avoid; }' +
-                       'pre, blockquote, table, img { page-break-inside: avoid; break-inside: avoid; }' +
-                       'a { color: #0000EE !important; text-decoration: underline !important; }' +
-                       '* { -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; }' +
-                       '} ' +
-                       'body { visibility: visible !important; opacity: 1 !important; }' +
-                       '[style*="display: none"], [style*="visibility: hidden"] { display: block !important; visibility: visible !important; }';
-            }
         }
     </style>
 </head>
