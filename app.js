@@ -12,8 +12,10 @@ class AppState {
     constructor() {
         this.markdown = '';
         this.theme = 'github';
-        this.filename = 'document';
         this.orientation = 'portrait';
+        const now = new Date();
+        const dateStr = now.toISOString().slice(0, 10);
+        this.filename = `${dateStr}-document`;
     }
 
     /**
@@ -164,6 +166,23 @@ class App {
         
         this.updateTheme(this.state.theme);
         this.updateThemeUI(this.state.theme);
+        
+        // Auto-resize textarea
+        this.autoResizeTextarea();
+    }
+
+    /**
+     * Auto-resize the markdown textarea based on content
+     * Min 6 lines, max 50vh, smooth on mobile/desktop
+     */
+    autoResizeTextarea() {
+        const textarea = document.getElementById('markdownInput');
+        const minHeight = 6 * 24; // 6 lines approx 24px each
+        const maxHeight = window.innerHeight * 0.5; // 50vh
+        
+        textarea.style.height = 'auto';
+        const scrollHeight = textarea.scrollHeight;
+        textarea.style.height = Math.max(minHeight, Math.min(scrollHeight, maxHeight)) + 'px';
     }
 
     /**
@@ -189,9 +208,10 @@ class App {
      * Wires up buttons, inputs, and file upload functionality
      */
     setupEventListeners() {
-        // Markdown input with debounced update (300ms delay reduces rendering overhead)
+        // Markdown input with debounced update and auto-resize
         document.getElementById('markdownInput').addEventListener('input', (e) => {
             this.state.markdown = e.target.value;
+            this.autoResizeTextarea();
             this.debouncedUpdate();
         });
 
