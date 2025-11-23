@@ -1,0 +1,29 @@
+{
+  "name": "markdown-to-file",
+  "version": "1.0.0",
+  "description": "A client-side static website that converts markdown (including tables and code blocks from LLM outputs) into downloadable PDF or self-contained HTML files.",
+  "main": "app.js",
+  "scripts": {
+    "lint": "eslint . --ext .js",
+    "format": "prettier --write .",
+    "test": "jest",
+    "verify": "npm run lint && npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/allarddewinter/markdown-to-file.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/allarddewinter/markdown-to-file/issues"
+  },
+  "homepage": "https://github.com/allarddewinter/markdown-to-file#readme",
+  "devDependencies": {
+    "eslint": "^9.39.1",
+    "jest": "^30.2.0",
+    "prettier": "^3.6.2"
+  }
+}

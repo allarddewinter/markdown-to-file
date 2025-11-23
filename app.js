@@ -16,6 +16,7 @@ class AppState {
         const dateStr = now.toISOString().slice(0, 10);
         this.filename = `${dateStr}-document`;
         this.showFooter = false;
+        this.printFontSize = 'medium';
     }
 
     /**
@@ -31,6 +32,7 @@ class AppState {
                 this.theme = data.theme || 'github';
                 this.filename = data.filename || 'document';
                 this.showFooter = data.showFooter || false;
+                this.printFontSize = data.printFontSize || 'medium';
             }
         } catch (error) {
             Logger.error('Failed to load saved state', error);
@@ -47,7 +49,8 @@ class AppState {
                 markdown: this.markdown,
                 theme: this.theme,
                 filename: this.filename,
-                showFooter: this.showFooter
+                showFooter: this.showFooter,
+                printFontSize: this.printFontSize
             };
             localStorage.setItem('markdownToFile', JSON.stringify(data));
         } catch (error) {
@@ -340,6 +343,7 @@ class App {
             // Initialize components
             this.renderer = new MarkdownRenderer();
             this.exporter = new ExportManager();
+            this.printManager = new PrintManager(this.exporter);
             this.footnoteManager.init();
 
             // Restore UI state
@@ -375,8 +379,11 @@ class App {
         document.getElementById('filenameInput').value = this.state.filename;
         
         document.getElementById('footerToggle').checked = this.state.showFooter;
+        document.getElementById('printFontSize').value = this.state.printFontSize;
         this.updateTheme(this.state.theme);
         this.updateThemeUI(this.state.theme);
+        // Apply saved print font size to preview
+        this.updatePrintFontSize(this.state.printFontSize);
         
         // Auto-resize textarea
         this.autoResizeTextarea();
@@ -412,6 +419,22 @@ class App {
             mainTitle.textContent = 'Markdown to File Converter';
             headerSubtext.textContent = 'Convert markdown to HTML with syntax highlighting';
         }
+    }
+
+    /**
+     * Apply selected print font size to preview content
+     * @param {string} size - 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge'
+     */
+    updatePrintFontSize(size) {
+        const preview = document.getElementById('preview');
+        preview.classList.remove(
+            'print-font-xsmall',
+            'print-font-small',
+            'print-font-medium',
+            'print-font-large',
+            'print-font-xlarge'
+        );
+        preview.classList.add(`print-font-${size}`);
     }
 
     /**
@@ -458,6 +481,11 @@ class App {
             this.state.filename = e.target.value || 'document';
             this.state.save();
         });
+        document.getElementById('printFontSize').addEventListener('change', (e) => {
+            this.state.printFontSize = e.target.value;
+            this.state.save();
+            this.updatePrintFontSize(e.target.value);
+        });
 
         // Add timestamp button
         document.getElementById('addTimestampBtn').addEventListener('click', () => {
@@ -491,6 +519,13 @@ class App {
 
         document.getElementById('previewHtmlBtn').addEventListener('click', () => {
             this.previewHTML();
+        });
+        // Print buttons
+        document.getElementById('printBtn').addEventListener('click', () => {
+            this.printManager.printDocument(this.state.markdown, this.state.filename, this.state.theme);
+        });
+        document.getElementById('printPreviewBtn').addEventListener('click', () => {
+            this.printManager.previewPrint(this.state.markdown, this.state.filename, this.state.theme);
         });
 
         // Clear log button

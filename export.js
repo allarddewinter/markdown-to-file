@@ -16,10 +16,10 @@ class ExportManager {
     /**
      * Load theme definitions
      * @returns {Object} - Theme configurations with CSS styles
-     * 
+     *
      * Design decision: Themes are defined in JavaScript for easier maintenance
      * and to ensure consistency between preview and export
-     * 
+     *
      * Extension point: Add new themes by adding entries to this object
      */
     loadThemes() {
@@ -36,7 +36,7 @@ class ExportManager {
                         max-width: 980px;
                         margin: 0 auto;
                     }
-                    h1, h2 { border-bottom: 1px solid #eaecef; padding-bottom: 0.3rem; }
+                    h1, h2 { border-bottom:1px solid #eaecef; padding-bottom: 0.3rem; }
                     h1 { font-size: 2rem; }
                     h2 { font-size: 1.5rem; }
                     h3 { font-size: 1.25rem; }
@@ -102,6 +102,7 @@ class ExportManager {
                     table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
                     th, td { border: 1px solid #ddd; padding: 0.75rem; text-align: left; }
                     th { background-color: #f5f5f5; font-weight: bold; }
+                    tr:nth-child(even) { background-color: #f5f5f5; }
                     blockquote { padding: 0 1rem; color: #666; border-left: 3px solid #ddd; margin: 1rem 0; font-style: italic; }
                     a { color: #333; text-decoration: underline; }
                 `
@@ -144,36 +145,18 @@ class ExportManager {
      * @param {string} markdown - The markdown source
      * @param {string} filename - Base filename (without extension)
      * @param {string} themeName - Theme to apply
-     * 
-     * Design decision: Export includes all dependencies inline for true portability
-     * The generated HTML can be opened anywhere without internet connection
-     * 
-     * Template structure:
-     * - Complete HTML5 document
-     * - Inlined theme CSS
-     * - Inlined Highlight.js styles
-     * - Rendered markdown content
-     * - No external dependencies
-     * 
-     * Extension point: Customize template by modifying generateHTMLTemplate method
+     * @param {boolean} showFooter - Whether to include footer
      */
     async exportToHTML(markdown, filename, themeName, showFooter = false) {
         try {
-            // Render markdown
             const marked = window.marked;
             const DOMPurify = window.DOMPurify;
-            
             if (!marked || !DOMPurify) {
                 throw new Error('Required libraries not loaded');
             }
-
             const rawHtml = marked.parse(markdown);
             const cleanHtml = DOMPurify.sanitize(rawHtml);
-
-            // Generate complete HTML document
             const htmlContent = this.generateHTMLTemplate(cleanHtml, themeName, filename, showFooter);
-
-            // Create blob and download
             const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
@@ -195,29 +178,25 @@ class ExportManager {
      * @param {string} filename - Base filename (without extension)
      * @param {string} themeName - Theme to apply
      * @param {boolean} showFooter - Whether to include footer
+     * @param {string} extraBodyClass - Optional extra class for body (e.g., font size)
      */
-    async previewHTML(markdown, filename, themeName, showFooter = false) {
+    async previewHTML(markdown, filename, themeName, showFooter = false, extraBodyClass = '') {
         try {
-            // Render markdown
             const marked = window.marked;
             const DOMPurify = window.DOMPurify;
-            
             if (!marked || !DOMPurify) {
                 throw new Error('Required libraries not loaded');
             }
-
             const rawHtml = marked.parse(markdown);
             const cleanHtml = DOMPurify.sanitize(rawHtml);
-
-            // Generate complete HTML document
-            const htmlContent = this.generateHTMLTemplate(cleanHtml, themeName, filename, showFooter);
-
-            // Create blob and open in new tab
+            const htmlContent = this.generateHTMLTemplate(cleanHtml, themeName, filename, showFooter, extraBodyClass);
             const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
             const url = URL.createObjectURL(blob);
-            window.open(url, '_blank');
-            // Clean up URL after a short delay
-            setTimeout(() => URL.revokeObjectURL(url), 100);
+            const win = window.open(url, '_blank');
+            setTimeout(() => {
+                if (win) win.close();
+                URL.revokeObjectURL(url);
+            }, 100);
         } catch (error) {
             console.error('HTML preview error:', error);
             window.Logger.error('Failed to preview HTML: ' + error.message);
@@ -229,18 +208,15 @@ class ExportManager {
      * @param {string} content - Rendered HTML content
      * @param {string} themeName - Theme name
      * @param {string} title - Document title
+     * @param {boolean} showFooter - Whether to show footer
+     * @param {string} extraBodyClass - Optional extra class for body (e.g., font size)
      * @returns {string} - Complete HTML document
-     *
-     * Customization guide:
-     * - Modify meta tags for SEO or specific requirements
-     * - Add custom CSS or JavaScript
-     * - Change document structure
-     * - Add headers, footers, or navigation
      */
-    generateHTMLTemplate(content, themeName, title, showFooter = false) {
+    generateHTMLTemplate(content, themeName, title, showFooter = false, extraBodyClass = '') {
         const theme = this.themes[themeName] || this.themes.github;
+        const safeCss = theme.css.replace(/`/g, '\\`');
         const date = new Date().toLocaleDateString();
-
+        const bodyClassAttr = extraBodyClass ? ` class="${extraBodyClass}"` : '';
         return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -251,12 +227,9 @@ class ExportManager {
     <title>${title}</title>
     <style>
         /* Theme: ${theme.name} */
-        ${theme.css}
-        
+        ${safeCss}
         /* Highlight.js Styles - GitHub Theme */
-        pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5px}.hljs{color:#24292e;background:#fff}.hljs-doctag,.hljs-keyword,.hljs-meta .hljs-keyword,.hljs-template-tag,.hljs-template-variable,.hljs-type,.hljs-variable.language_{color:#d73a49}.hljs-title,.hljs-title.class_,.hljs-title.class_.inherited__,.hljs-title.function_{color:#6f42c1}.hljs-attr,.hljs-attribute,.hljs-literal,.hljs-meta,.hljs-number,.hljs-operator,.hljs-selector-attr,.hljs-selector-class,.hljs-selector-id,.hljs-variable{color:#005cc5}.hljs-meta .hljs-string,.hljs-regexp,.hljs-string{color:#032f62}.hljs-built_in,.hljs-symbol{color:#e36209}.hljs-code,.hljs-comment,.hljs-formula{color:#6a737d}.hljs-name,.hljs-quote,.hljs-selector-pseudo,.hljs-selector-tag{color:#22863a}.hljs-subst{color:#24292e}.hljs-section{color:#005cc5;font-weight:700}.hljs-bullet{color:#735c0f}.hljs-emphasis{color:#24292e;font-style:italic}.hljs-strong{color:#24292e;font-weight:700}.hljs-addition{color:#22863a;background-color:#f0fff4}.hljs-deletion{color:#b31d28;background-color:#ffeef0}
-        
-        /* Print styles */
+        pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5px}.hljs{color:#24292e;background:#fff}.hljs-doctag,.hljs-keyword,.hljs-meta .hljs-keyword,.hljs-template-tag,.hljs-template-variable,.hljs-type,.hljs-variable.language_{color:#d73a49}.hljs-title,.hljs-title.class_,.hljs-title.class_.inherited__,.hljs-title.function_{color:#6f42c1}.hljs-attr,.hljs-attribute,.hljs-literal,.hljs-meta,.hljs-number,.hljs-operator,.hljs-selector-attr,.hljs-selector-class,.hljs-selector-id,.hljs-selector-pseudo,.hljs-selector-tag,.hljs-variable{color:#005cc5}.hljs-meta .hljs-string,.hljs-regexp,.hljs-string{color:#032f62}.hljs-built_in,.hljs-symbol{color:#e36209}.hljs-code,.hljs-comment,.hljs-formula{color:#6a737d}.hljs-name,.hljs-quote,.hljs-selector-pseudo,.hljs-selector-tag{color:#22863a}.hljs-subst{color:#24292e}.hljs-section{color:#005cc5;font-weight:700}.hljs-bullet{color:#735c0f}.hljs-emphasis{color:#24292e;font-style:italic}.hljs-strong{color:#24292e;font-weight:700}.hljs-addition{color:#22863a;background-color:#f0fff4}.hljs-deletion{color:#b31d28;background-color:#ffeef0}
         @media print {
             body { background-color: #fff; }
             a { color: #000; text-decoration: underline; }
@@ -265,9 +238,8 @@ class ExportManager {
         }
     </style>
 </head>
-<body>
+<body${bodyClassAttr}>
     ${content}
-    
     <footer style="margin-top: 3rem; padding-top: 1rem; border-top: 1px solid #ddd; font-size: 0.85rem; color: #666; text-align: center; display: ${showFooter ? 'block' : 'none'};">
         <p>Generated on ${date} by <a href="https://allarddewinter.github.io/markdown-to-file/" target="_blank">The Scribe's Workshop</a>.</p>
     </footer>

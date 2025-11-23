@@ -102,6 +102,16 @@ function hello() {
                     🕒 Timestamp It
                 </button>
             </div>
+        <div class="control-group">
+            <label for="printFontSize">Print Font Size:</label>
+            <select id="printFontSize">
+                <option value="xsmall">Extra Small (9pt)</option>
+                <option value="small">Small (10pt)</option>
+                <option value="medium" selected>Medium (12pt)</option>
+                <option value="large">Large (14pt)</option>
+                <option value="xlarge">Extra Large (16pt)</option>
+            </select>
+        </div>
 
             <div class="control-group">
                 <label for="footerToggle">Include Footer:</label>
@@ -109,12 +119,15 @@ function hello() {
             </div>
 
             <div class="control-group export-buttons">
-                <button id="exportHtmlBtn" class="btn btn-primary">
-                    🌐 Craft HTML
-                </button>
-                <button id="previewHtmlBtn" class="btn btn-secondary">
-                    👁️ Preview HTML
-                </button>
+                    <button id="exportHtmlBtn" class="btn btn-primary">
+                        🌐 Craft HTML
+                    </button>
+                    <button id="printBtn" class="btn btn-primary">
+                        🖨️ Print Document
+                    </button>
+                    <button id="printPreviewBtn" class="btn btn-secondary">
+                        👁️ Print Preview
+                    </button>
             </div>
         </div>
 
@@ -135,6 +148,7 @@ function hello() {
     <!-- Application Scripts (loaded in order) -->
     <script src="markdown.js"></script>
     <script src="export.js"></script>
+    <script src="print.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

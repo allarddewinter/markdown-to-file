@@ -13,7 +13,7 @@ A client-side static website that converts markdown (including tables and code b
 - **File Upload**: Load markdown files directly from your computer
 - **Timestamp Support**: Optionally append timestamps to exported filenames
 - **XSS Protection**: DOMPurify sanitization for safe rendering
-- **No Server Required**: 100% client-side, works offline after initial load
+- **No Server Required**: 100% client‑side, works offline after initial load
 - **Footnote Support**: Add footnotes to selected text with automatic numbering
 
 ## 🚀 Usage
@@ -113,11 +113,19 @@ function hello() {
 
 2. Open `index.html` in your browser.
 
+## 🛠️ Development
+
+- **Linting**: Run `npm run lint` to check code style and catch potential errors.
+- **Formatting**: Run `npm run format` to automatically format the codebase with Prettier.
+- **Testing**: Run `npm test` or `npm run verify` to execute the Jest test suite and ensure everything works.
+
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## 📄 Project Structure
+- .gitignore – standard Node ignore file
 
 ```
 markdown-to-file/
@@ -162,7 +170,3 @@ MIT License - feel free to use this project however you'd like!
 ---
 
 **Note**: This is a client-side only application. All processing happens in your browser, and no data is sent to any server.
-
-
-
-

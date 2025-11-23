@@ -1,0 +1,36 @@
+/* styles/print.css */
+@media print {
+    /* Hide UI elements */
+    .editor-pane, .export-controls, .message-log, .footnote-toolbar {
+        display: none !important;
+    }
+    
+    /* Print-friendly typography */
+    .preview-content {
+        font-size: 12pt;
+        line-height: 1.4;
+        color: #000;
+        background: #fff;
+    }
+    
+    /* Link URL display */
+    a[href]:after {
+        content: " (" attr(href) ")";
+        font-size: 0.8em;
+        color: #666;
+    }
+    
+    /* Code block optimization */
+    pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        page-break-inside: avoid;
+    }
+}
+
+/* Font size utility classes for preview (non‑print) */
+.print-font-xsmall { font-size: 9pt; }
+.print-font-small  { font-size: 10pt; }
+.print-font-medium { font-size: 12pt; }
+.print-font-large  { font-size: 14pt; }
+.print-font-xlarge { font-size: 16pt; }
