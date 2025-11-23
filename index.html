@@ -13,7 +13,7 @@
     <div class="container">
         <header>
             <h1 id="mainTitle">Markdown to File Converter</h1>
-            <p id="headerSubtext">Convert markdown to PDF or HTML with syntax highlighting</p>
+            <p id="headerSubtext">Convert markdown to HTML with syntax highlighting</p>
         </header>
 
         <div class="main-content">
@@ -104,25 +104,11 @@ function hello() {
             </div>
 
             <div class="control-group">
-                <label for="orientationSelect">Orientation:</label>
-                <select id="orientationSelect">
-                    <option value="portrait" selected>Portrait</option>
-                    <option value="landscape">Landscape</option>
-                </select>
-            </div>
-            <div class="control-group">
-                <label for="footerToggle">Include Footer:</label>
-                <input type="checkbox" id="footerToggle">
-            </div>
-            <div class="control-group">
                 <label for="footerToggle">Include Footer:</label>
                 <input type="checkbox" id="footerToggle">
             </div>
 
             <div class="control-group export-buttons">
-                <button id="exportPdfBtn" class="btn btn-primary">
-                    📄 Summon PDF
-                </button>
                 <button id="exportHtmlBtn" class="btn btn-primary">
                     🌐 Craft HTML
                 </button>
@@ -130,9 +116,6 @@ function hello() {
                     👁️ Preview HTML
                 </button>
             </div>
-                <button id="previewHtmlBtn" class="btn btn-secondary">
-                    👁️ Preview HTML
-                </button>
         </div>
 
         <footer>
@@ -148,7 +131,6 @@ function hello() {
     <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <!-- Application Scripts (loaded in order) -->
     <script src="markdown.js"></script>

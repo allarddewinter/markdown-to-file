@@ -12,7 +12,6 @@ class AppState {
     constructor() {
         this.markdown = '';
         this.theme = 'github';
-        this.orientation = 'portrait';
         const now = new Date();
         const dateStr = now.toISOString().slice(0, 10);
         this.filename = `${dateStr}-document`;
@@ -31,7 +30,6 @@ class AppState {
                 this.markdown = data.markdown || '';
                 this.theme = data.theme || 'github';
                 this.filename = data.filename || 'document';
-                this.orientation = data.orientation || 'portrait';
                 this.showFooter = data.showFooter || false;
             }
         } catch (error) {
@@ -49,7 +47,6 @@ class AppState {
                 markdown: this.markdown,
                 theme: this.theme,
                 filename: this.filename,
-                orientation: this.orientation,
                 showFooter: this.showFooter
             };
             localStorage.setItem('markdownToFile', JSON.stringify(data));
@@ -376,7 +373,6 @@ class App {
         document.getElementById('markdownInput').value = this.state.markdown;
         document.getElementById('themeSelect').value = this.state.theme;
         document.getElementById('filenameInput').value = this.state.filename;
-        document.getElementById('orientationSelect').value = this.state.orientation;
         
         document.getElementById('footerToggle').checked = this.state.showFooter;
         this.updateTheme(this.state.theme);
@@ -414,7 +410,7 @@ class App {
             headerSubtext.textContent = 'Where ancient scrolls meet modern export capabilities';
         } else {
             mainTitle.textContent = 'Markdown to File Converter';
-            headerSubtext.textContent = 'Convert markdown to PDF or HTML with syntax highlighting';
+            headerSubtext.textContent = 'Convert markdown to HTML with syntax highlighting';
         }
     }
 
@@ -480,11 +476,6 @@ class App {
             Logger.info(messages[Math.floor(Math.random() * messages.length)]);
         });
 
-        // Orientation selection
-        document.getElementById('orientationSelect').addEventListener('change', (e) => {
-            this.state.orientation = e.target.value;
-            this.state.save();
-        });
 
         // Footer toggle
         document.getElementById('footerToggle').addEventListener('change', (e) => {
@@ -493,9 +484,6 @@ class App {
         });
 
         // Export buttons
-        document.getElementById('exportPdfBtn').addEventListener('click', () => {
-            this.exportPDF();
-        });
 
         document.getElementById('exportHtmlBtn').addEventListener('click', () => {
             this.exportHTML();
@@ -587,44 +575,6 @@ class App {
         previewThemeLink.href = `styles/themes/${themeName}.css`;
     }
 
-    /**
-     * Export current markdown as PDF
-     * Uses html2pdf.js with theme-specific styling and user preferences
-     */
-    async exportPDF() {
-        try {
-            const preview = document.getElementById('preview');
-            if (!preview.innerHTML.trim()) {
-                Logger.warning('Nothing to export! The scroll is blank.');
-                return;
-            }
-
-            const messages = [
-                'Summoning PDF from the ether...',
-                'Consulting the ancient PDF spirits...',
-                'Inscribing upon digital parchment...',
-                'The PDF scribes are hard at work...'
-            ];
-            Logger.info(messages[Math.floor(Math.random() * messages.length)]);
-            
-            await this.exporter.exportToPDF(
-                preview,
-                this.state.filename,
-                this.state.theme,
-                this.state.orientation
-            );
-            
-            const successMessages = [
-                'PDF materialized! A miracle of modern technology.',
-                'Your PDF has been summoned successfully.',
-                'Behold, a PDF! What wonders we create.',
-                'PDF exported. Go forth and distribute knowledge.'
-            ];
-            Logger.success(successMessages[Math.floor(Math.random() * successMessages.length)]);
-        } catch (error) {
-            Logger.error('The PDF spirits have rejected your offering', error);
-        }
-    }
 
     /**
      * Export current markdown as self-contained HTML

@@ -1,12 +1,12 @@
 /**
- * Export module for PDF and HTML generation
+ * Export module for HTML generation
  * Handles creation of downloadable files with theme-specific styling
  * @module export
  */
 
 /**
  * ExportManager class
- * Manages PDF and HTML export functionality with configurable themes and options
+ * Manages HTML export functionality with configurable themes and options
  */
 class ExportManager {
     constructor() {
@@ -140,109 +140,6 @@ class ExportManager {
     }
 
     /**
-     * Export content to PDF
-     * @param {HTMLElement} element - The element to export
-     * @param {string} filename - Base filename (without extension)
-     * @param {string} themeName - Theme to apply
-     * @param {string} orientation - 'portrait' or 'landscape'
-     * 
-     * Configuration rationale:
-     * - A4 page size: Standard international paper size
-     * - 10mm margins: Balances content space with printer margins
-     * - html2canvas scale 2: Higher quality output, especially for code
-     * - jsPDF format 'a4': Matches page size setting
-     * 
-     * Extension points:
-     * - Add custom page sizes (letter, legal, etc.)
-     * - Customize margins per theme
-     * - Add headers/footers
-     */
-    async exportToPDF(element, filename, themeName, orientation) {
-        if (typeof html2pdf === 'undefined') {
-            throw new Error('html2pdf library not loaded');
-        }
-
-        try {
-            // Clone the element to avoid modifying the preview
-            const clone = element.cloneNode(true);
-            
-            // Apply theme styling with print optimizations
-            const themeStyle = document.createElement('style');
-            const themeCss = this.themes[themeName]?.css || this.themes.github.css;
-            themeStyle.textContent = this.optimizeCSSForPDF(themeCss);
-            clone.insertBefore(themeStyle, clone.firstChild);
-
-            // Add PDF-specific styles for better text rendering
-            const pdfStyle = document.createElement('style');
-            pdfStyle.textContent = this.getPDFPrintStyles();
-            clone.insertBefore(pdfStyle, clone.firstChild);
-
-            // Configure html2pdf options for optimal text rendering
-            const options = {
-                margin: [15, 15, 15, 15], // Top, Right, Bottom, Left margins
-                filename: `${filename}.pdf`,
-                image: {
-                    type: 'jpeg',
-                    quality: 0.98,
-                },
-                html2canvas: {
-                    scale: 2, // Balanced resolution for quality and performance
-                    useCORS: true,
-                    letterRendering: true,
-                    allowTaint: false,
-                    logging: false,
-                    backgroundColor: '#ffffff',
-                    // Optimize for text rendering
-                    onclone: function(clonedDoc) {
-                        // Force text rendering optimizations
-                        clonedDoc.body.style.webkitPrintColorAdjust = 'exact';
-                        clonedDoc.body.style.printColorAdjust = 'exact';
-                        clonedDoc.body.style.fontSmoothing = 'antialiased';
-                        
-                        // Ensure all text is visible and selectable
-                        const elements = clonedDoc.querySelectorAll('*');
-                        elements.forEach(el => {
-                            el.style.visibility = 'visible';
-                            el.style.opacity = '1';
-                            el.style.userSelect = 'text';
-                            el.style.webkitUserSelect = 'text';
-                        });
-                    },
-                    scrollX: 0,
-                    scrollY: 0,
-                    windowWidth: 800, // Fixed width for consistent rendering
-                    windowHeight: 1200
-                },
-                jsPDF: {
-                    unit: 'mm',
-                    format: 'a4',
-                    orientation: orientation || 'portrait',
-                    compress: true,
-                    putOnlyUsedFonts: true,
-                    hotfixes: ["px_scaling"],
-                    // Enable text layers for selectable text
-                    font: 'helvetica',
-                    encoding: 'Identity-H'
-                },
-                pagebreak: {
-                    mode: ['avoid-all', 'css', 'legacy'],
-                    before: '.page-break-before',
-                    after: '.page-break-after',
-                    avoid: ['pre', 'table', 'img', 'h1', 'h2', 'h3', 'blockquote']
-                },
-                // Enable text selection by using text rendering mode
-                enableLinks: true
-            };
-
-            // Generate PDF and trigger download
-            await html2pdf().set(options).from(clone).save();
-        } catch (error) {
-            console.error('PDF export error:', error);
-            throw new Error('Failed to generate PDF: ' + error.message);
-        }
-    }
-
-    /**
      * Export content to self-contained HTML
      * @param {string} markdown - The markdown source
      * @param {string} filename - Base filename (without extension)
@@ -292,7 +189,6 @@ class ExportManager {
         }
     }
 
-
     /**
      * Preview HTML in new tab without downloading
      * @param {string} markdown - The markdown source
@@ -303,12 +199,7 @@ class ExportManager {
     async previewHTML(markdown, filename, themeName, showFooter = false) {
         try {
             // Render markdown
-            const marked = window.marked
-    /**
-     * Optimize CSS for PDF rendering
-     * @param {string} css - Original CSS
-     * @returns {string} - Optimized CSS for PDF
-     */
+            const marked = window.marked;
             const DOMPurify = window.DOMPurify;
             
             if (!marked || !DOMPurify) {
@@ -331,37 +222,6 @@ class ExportManager {
             console.error('HTML preview error:', error);
             window.Logger.error('Failed to preview HTML: ' + error.message);
         }
-    }
-    optimizeCSSForPDF(css) {
-        // Remove animations and transitions that don't work well in PDF
-        let optimized = css.replace(/animation[^;]*;/g, '')
-                          .replace(/transition[^;]*;/g, '')
-                          .replace(/transform[^;]*;/g, '')
-                          .replace(/filter[^;]*;/g, '')
-                          .replace(/opacity[^;]*;/g, '');
-        
-        // Add PDF-specific optimizations
-        optimized += '* { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; box-sizing: border-box; }';
-        optimized += 'body { font-family: Arial, Helvetica, sans-serif !important; line-height: 1.4 !important; }';
-        optimized += 'pre, code { font-family: "Courier New", Courier, monospace !important; white-space: pre-wrap !important; }';
-        
-        return optimized;
-    }
-
-    /**
-     * Get PDF-specific print styles for better rendering
-     * @returns {string} - Print-optimized CSS
-     */
-    getPDFPrintStyles() {
-        return '@media print { ' +
-               'body { margin: 0 !important; padding: 15mm !important; background: white !important; color: black !important; font-size: 12pt !important; line-height: 1.4 !important; }' +
-               'h1, h2, h3, h4, h5, h6 { page-break-after: avoid; break-after: avoid; }' +
-               'pre, blockquote, table, img { page-break-inside: avoid; break-inside: avoid; }' +
-               'a { color: #0000EE !important; text-decoration: underline !important; }' +
-               '* { -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; }' +
-               '} ' +
-               'body { visibility: visible !important; opacity: 1 !important; }' +
-               '[style*="display: none"], [style*="visibility: hidden"] { display: block !important; visibility: visible !important; }';
     }
 
     /**
