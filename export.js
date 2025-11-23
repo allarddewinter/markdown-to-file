@@ -260,7 +260,7 @@ class ExportManager {
      * 
      * Extension point: Customize template by modifying generateHTMLTemplate method
      */
-    async exportToHTML(markdown, filename, themeName) {
+    async exportToHTML(markdown, filename, themeName, showFooter = false) {
         try {
             // Render markdown
             const marked = window.marked;
@@ -274,7 +274,7 @@ class ExportManager {
             const cleanHtml = DOMPurify.sanitize(rawHtml);
 
             // Generate complete HTML document
-            const htmlContent = this.generateHTMLTemplate(cleanHtml, themeName, filename);
+            const htmlContent = this.generateHTMLTemplate(cleanHtml, themeName, filename, showFooter);
 
             // Create blob and download
             const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
@@ -292,11 +292,46 @@ class ExportManager {
         }
     }
 
+
+    /**
+     * Preview HTML in new tab without downloading
+     * @param {string} markdown - The markdown source
+     * @param {string} filename - Base filename (without extension)
+     * @param {string} themeName - Theme to apply
+     * @param {boolean} showFooter - Whether to include footer
+     */
+    async previewHTML(markdown, filename, themeName, showFooter = false) {
+        try {
+            // Render markdown
+            const marked = window.marked
     /**
      * Optimize CSS for PDF rendering
      * @param {string} css - Original CSS
      * @returns {string} - Optimized CSS for PDF
      */
+            const DOMPurify = window.DOMPurify;
+            
+            if (!marked || !DOMPurify) {
+                throw new Error('Required libraries not loaded');
+            }
+
+            const rawHtml = marked.parse(markdown);
+            const cleanHtml = DOMPurify.sanitize(rawHtml);
+
+            // Generate complete HTML document
+            const htmlContent = this.generateHTMLTemplate(cleanHtml, themeName, filename, showFooter);
+
+            // Create blob and open in new tab
+            const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            window.open(url, '_blank');
+            // Clean up URL after a short delay
+            setTimeout(() => URL.revokeObjectURL(url), 100);
+        } catch (error) {
+            console.error('HTML preview error:', error);
+            window.Logger.error('Failed to preview HTML: ' + error.message);
+        }
+    }
     optimizeCSSForPDF(css) {
         // Remove animations and transitions that don't work well in PDF
         let optimized = css.replace(/animation[^;]*;/g, '')
@@ -342,7 +377,7 @@ class ExportManager {
      * - Change document structure
      * - Add headers, footers, or navigation
      */
-    generateHTMLTemplate(content, themeName, title) {
+    generateHTMLTemplate(content, themeName, title, showFooter = false) {
         const theme = this.themes[themeName] || this.themes.github;
         const date = new Date().toLocaleDateString();
 
@@ -373,8 +408,8 @@ class ExportManager {
 <body>
     ${content}
     
-    <footer style="margin-top: 3rem; padding-top: 1rem; border-top: 1px solid #ddd; font-size: 0.85rem; color: #666; text-align: center;">
-        <p>Generated on ${date} by <a href="https://github.com" target="_blank">Markdown to File Converter</a></p>
+    <footer style="margin-top: 3rem; padding-top: 1rem; border-top: 1px solid #ddd; font-size: 0.85rem; color: #666; text-align: center; display: ${showFooter ? 'block' : 'none'};">
+        <p>Generated on ${date} by <a href="https://allarddewinter.github.io/markdown-to-file/" target="_blank">The Scribe's Workshop</a>.</p>
     </footer>
 </body>
 </html>`;

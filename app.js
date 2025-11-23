@@ -16,6 +16,7 @@ class AppState {
         const now = new Date();
         const dateStr = now.toISOString().slice(0, 10);
         this.filename = `${dateStr}-document`;
+        this.showFooter = false;
     }
 
     /**
@@ -31,6 +32,7 @@ class AppState {
                 this.theme = data.theme || 'github';
                 this.filename = data.filename || 'document';
                 this.orientation = data.orientation || 'portrait';
+                this.showFooter = data.showFooter || false;
             }
         } catch (error) {
             Logger.error('Failed to load saved state', error);
@@ -47,7 +49,8 @@ class AppState {
                 markdown: this.markdown,
                 theme: this.theme,
                 filename: this.filename,
-                orientation: this.orientation
+                orientation: this.orientation,
+                showFooter: this.showFooter
             };
             localStorage.setItem('markdownToFile', JSON.stringify(data));
         } catch (error) {
@@ -375,6 +378,7 @@ class App {
         document.getElementById('filenameInput').value = this.state.filename;
         document.getElementById('orientationSelect').value = this.state.orientation;
         
+        document.getElementById('footerToggle').checked = this.state.showFooter;
         this.updateTheme(this.state.theme);
         this.updateThemeUI(this.state.theme);
         
@@ -482,6 +486,12 @@ class App {
             this.state.save();
         });
 
+        // Footer toggle
+        document.getElementById('footerToggle').addEventListener('change', (e) => {
+            this.state.showFooter = e.target.checked;
+            this.state.save();
+        });
+
         // Export buttons
         document.getElementById('exportPdfBtn').addEventListener('click', () => {
             this.exportPDF();
@@ -489,6 +499,10 @@ class App {
 
         document.getElementById('exportHtmlBtn').addEventListener('click', () => {
             this.exportHTML();
+        });
+
+        document.getElementById('previewHtmlBtn').addEventListener('click', () => {
+            this.previewHTML();
         });
 
         // Clear log button
@@ -646,6 +660,24 @@ class App {
             Logger.success(successMessages[Math.floor(Math.random() * successMessages.length)]);
         } catch (error) {
             Logger.error('The HTML weaving has failed catastrophically', error);
+        }
+    }
+
+    /**
+     * Preview current markdown as HTML in new tab
+     */
+    async previewHTML() {
+        try {
+            Logger.info('Opening HTML preview...');
+            await this.exporter.previewHTML(
+                this.state.markdown,
+                this.state.filename,
+                this.state.theme,
+                this.state.showFooter
+            );
+            Logger.success('HTML preview opened in new tab');
+        } catch (error) {
+            Logger.error('Preview failed', error);
         }
     }
 }
