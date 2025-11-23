@@ -95,3 +95,6 @@ class PrintManager {
         }
     }
 }
+if (typeof module !== 'undefined') {
+    module.exports = { PrintManager };
+}

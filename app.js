@@ -366,7 +366,7 @@ class App {
             Logger.info(greetings[Math.floor(Math.random() * greetings.length)]);
         } catch (error) {
             Logger.error('Failed to initialize application', error);
-        }
+        } // end setupEventListeners
     }
 
     /**
@@ -443,95 +443,145 @@ class App {
      */
     setupEventListeners() {
         // Markdown input with debounced update and auto-resize
-        document.getElementById('markdownInput').addEventListener('input', (e) => {
-            this.state.markdown = e.target.value;
-            this.autoResizeTextarea();
-            this.debouncedUpdate();
-        });
+        const markdownInput = document.getElementById('markdownInput');
+        if (markdownInput) {
+            markdownInput.addEventListener('input', (e) => {
+                this.state.markdown = e.target.value;
+                this.autoResizeTextarea();
+                this.debouncedUpdate();
+            });
+        } else {
+            Logger.warning('Markdown input element not found');
+        }
 
         // Clear button
-        document.getElementById('clearBtn').addEventListener('click', () => {
-            if (confirm('Are you sure? This will erase all your precious scribblings!')) {
-                this.state.markdown = '';
-                document.getElementById('markdownInput').value = '';
-                this.updatePreview();
-                Logger.info('Content obliterated. What a waste.');
-            }
-        });
+        const clearBtn = document.getElementById('clearBtn');
+        if (clearBtn) {
+            clearBtn.addEventListener('click', () => {
+                if (confirm('Are you sure? This will erase all your precious scribblings!')) {
+                    this.state.markdown = '';
+                    document.getElementById('markdownInput').value = '';
+                    this.updatePreview();
+                    Logger.info('Content obliterated. What a waste.');
+                }
+            });
+        } // end if clearBtn
 
         // File upload
-        document.getElementById('uploadBtn').addEventListener('click', () => {
-            document.getElementById('fileInput').click();
-        });
+        const uploadBtn = document.getElementById('uploadBtn');
+        if (uploadBtn) {
+            uploadBtn.addEventListener('click', () => {
+                document.getElementById('fileInput').click();
+            });
+        } // end if uploadBtn
 
-        document.getElementById('fileInput').addEventListener('change', (e) => {
-            this.handleFileUpload(e.target.files[0]);
-        });
+        const fileInput = document.getElementById('fileInput');
+        if (fileInput) {
+            fileInput.addEventListener('change', (e) => {
+                this.handleFileUpload(e.target.files[0]);
+            });
+        } // end if fileInput
 
         // Theme selection
-        document.getElementById('themeSelect').addEventListener('change', (e) => {
-            this.state.theme = e.target.value;
-            this.updateTheme(e.target.value);
-            this.updateThemeUI(e.target.value);
-            this.state.save();
-        });
+        const themeSelect = document.getElementById('themeSelect');
+        if (themeSelect) {
+            themeSelect.addEventListener('change', (e) => {
+                this.state.theme = e.target.value;
+                this.updateTheme(e.target.value);
+                this.updateThemeUI(e.target.value);
+                this.state.save();
+            });
+        } // end if themeSelect
 
         // Filename input
-        document.getElementById('filenameInput').addEventListener('input', (e) => {
-            this.state.filename = e.target.value || 'document';
-            this.state.save();
-        });
-        document.getElementById('printFontSize').addEventListener('change', (e) => {
-            this.state.printFontSize = e.target.value;
-            this.state.save();
-            this.updatePrintFontSize(e.target.value);
-        });
+        const filenameInput = document.getElementById('filenameInput');
+        if (filenameInput) {
+            filenameInput.addEventListener('input', (e) => {
+                this.state.filename = e.target.value || 'document';
+                this.state.save();
+            });
+        } // end if filenameInput
+        const printFontSizeSelect = document.getElementById('printFontSize');
+        if (printFontSizeSelect) {
+            printFontSizeSelect.addEventListener('change', (e) => {
+                this.state.printFontSize = e.target.value;
+                this.state.save();
+                this.updatePrintFontSize(e.target.value);
+            });
+        } else {
+            Logger.warning('Print font size selector not found');
+        }
 
         // Add timestamp button
-        document.getElementById('addTimestampBtn').addEventListener('click', () => {
-            const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
-            const currentName = document.getElementById('filenameInput').value || 'document';
-            const newName = `${currentName}_${timestamp}`;
-            document.getElementById('filenameInput').value = newName;
-            this.state.filename = newName;
-            this.state.save();
-            const messages = [
-                'Timestamp inscribed upon the scroll',
-                'Marked with the passage of time',
-                'The hour has been noted for posterity',
-                'Timestamped. How very bureaucratic.'
-            ];
-            Logger.info(messages[Math.floor(Math.random() * messages.length)]);
-        });
+        const addTimestampBtn = document.getElementById('addTimestampBtn');
+        if (addTimestampBtn) {
+            addTimestampBtn.addEventListener('click', () => {
+                const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+                const currentName = document.getElementById('filenameInput').value || 'document';
+                const newName = `${currentName}_${timestamp}`;
+                document.getElementById('filenameInput').value = newName;
+                this.state.filename = newName;
+                this.state.save();
+                const messages = [
+                    'Timestamp inscribed upon the scroll',
+                    'Marked with the passage of time',
+                    'The hour has been noted for posterity',
+                    'Timestamped. How very bureaucratic.'
+                ];
+                Logger.info(messages[Math.floor(Math.random() * messages.length)]);
+            });
+        } // end if addTimestampBtn
 
 
         // Footer toggle
-        document.getElementById('footerToggle').addEventListener('change', (e) => {
-            this.state.showFooter = e.target.checked;
-            this.state.save();
-        });
+        const footerToggle = document.getElementById('footerToggle');
+        if (footerToggle) {
+            footerToggle.addEventListener('change', (e) => {
+                this.state.showFooter = e.target.checked;
+                this.state.save();
+            });
+        } // end if footerToggle
 
         // Export buttons
 
-        document.getElementById('exportHtmlBtn').addEventListener('click', () => {
-            this.exportHTML();
-        });
+        const exportHtmlBtn = document.getElementById('exportHtmlBtn');
+        if (exportHtmlBtn) {
+            exportHtmlBtn.addEventListener('click', () => {
+                this.exportHTML();
+            });
+        } // end if exportHtmlBtn
 
-        document.getElementById('previewHtmlBtn').addEventListener('click', () => {
-            this.previewHTML();
-        });
+        const previewHtmlBtn = document.getElementById('previewHtmlBtn');
+        if (previewHtmlBtn) {
+            previewHtmlBtn.addEventListener('click', () => {
+                this.previewHTML();
+            });
+        } // end if previewHtmlBtn
         // Print buttons
-        document.getElementById('printBtn').addEventListener('click', () => {
-            this.printManager.printDocument(this.state.markdown, this.state.filename, this.state.theme);
-        });
-        document.getElementById('printPreviewBtn').addEventListener('click', () => {
-            this.printManager.previewPrint(this.state.markdown, this.state.filename, this.state.theme);
-        });
+        const printBtn = document.getElementById('printBtn');
+        if (printBtn) {
+            printBtn.addEventListener('click', () => {
+                this.printManager.printDocument(this.state.markdown, this.state.filename, this.state.theme);
+            });
+        } else {
+            Logger.warning('Print button not found');
+        }
+        const printPreviewBtn = document.getElementById('printPreviewBtn');
+        if (printPreviewBtn) {
+            printPreviewBtn.addEventListener('click', () => {
+                this.printManager.previewPrint(this.state.markdown, this.state.filename, this.state.theme);
+            });
+        } else {
+            Logger.warning('Print preview button not found');
+        }
 
         // Clear log button
-        document.getElementById('clearLog').addEventListener('click', () => {
-            Logger.clear();
-        });
+        const clearLogBtn = document.getElementById('clearLog');
+        if (clearLogBtn) {
+            clearLogBtn.addEventListener('click', () => {
+                Logger.clear();
+            });
+        } // end if clearLogBtn
     }
 
     /**
@@ -678,5 +728,10 @@ if (document.readyState === 'loading') {
     app.init();
 }
 
-// Make Logger globally available for export modules
+/* Export App for testing */
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { App };
+} else {
+    window.App = App;
+}
 window.Logger = Logger;
